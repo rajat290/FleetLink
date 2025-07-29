@@ -1,3 +1,4 @@
+// src/components/AddVehicle.jsx
 import { useState } from 'react';
 import api from '../api/axiosConfig';
 
@@ -18,10 +19,10 @@ export default function AddVehicle() {
         capacityKg: Number(form.capacityKg),
         tyres: Number(form.tyres),
       });
-      setMessage('Vehicle added successfully!');
+      setMessage('✅ Vehicle added successfully!');
       setForm({ name: '', capacityKg: '', tyres: '' });
     } catch (err) {
-      setMessage('Error adding vehicle');
+      setMessage('❌ Error adding vehicle');
     }
   };
 
@@ -34,7 +35,7 @@ export default function AddVehicle() {
         <input name="tyres" placeholder="Tyres" value={form.tyres} onChange={handleChange} type="number" required className="border p-2" />
         <button type="submit" className="bg-blue-500 text-white py-2 px-4">Submit</button>
       </form>
-      {message && <p className="mt-2 text-center text-green-600">{message}</p>}
+      {message && <p className="mt-2 text-center">{message}</p>}
     </div>
   );
 }
