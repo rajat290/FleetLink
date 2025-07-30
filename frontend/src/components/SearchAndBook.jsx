@@ -1,17 +1,15 @@
-// src/components/SearchAndBook.jsx
-import { useState } from 'react';
-import api from '../api/axiosConfig';
+import { useState } from "react";
+import api from "../api/axiosConfig";
 
 export default function SearchAndBook() {
   const [form, setForm] = useState({
-    capacityRequired: '',
-    fromPincode: '',
-    toPincode: '',
-    startTime: '',
+    capacityRequired: "",
+    fromPincode: "",
+    toPincode: "",
+    startTime: "",
   });
-
   const [vehicles, setVehicles] = useState([]);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,51 +17,98 @@ export default function SearchAndBook() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
     try {
-      const res = await api.get('/vehicles/available', {
-        params: form,
-      });
+      const res = await api.get("/vehicles/available", { params: form });
       setVehicles(res.data.availableVehicles || []);
-      setMessage(`Estimated Duration: ${res.data.estimatedRideDurationHours} hrs`);
-    } catch (err) {
-      setMessage('❌ Error fetching vehicles');
+      setMessage(
+        `Estimated Duration: ${res.data.estimatedRideDurationHours} hrs`
+      );
+    } catch {
+      setMessage("❌ Error fetching vehicles");
     }
   };
 
   const handleBook = async (vehicleId) => {
     try {
-      await api.post('/bookings', {
+      await api.post("/bookings", {
         vehicleId,
         ...form,
-        customerId: 'demo123',
+        customerId: "demo123",
       });
-      alert('✅ Booking successful');
-    } catch (err) {
-      alert('❌ Booking failed: Vehicle may be unavailable');
+      alert("✅ Booking successful!");
+    } catch {
+      alert("❌ Booking failed: Vehicle may be unavailable.");
     }
   };
 
   return (
-    <div className="p-4 border rounded max-w-xl mx-auto my-4">
-      <h2 className="text-xl font-semibold mb-2">Search & Book Vehicles</h2>
-      <form onSubmit={handleSearch} className="flex flex-col gap-2">
-        <input name="capacityRequired" placeholder="Capacity Required" value={form.capacityRequired} onChange={handleChange} required className="border p-2" />
-        <input name="fromPincode" placeholder="From Pincode" value={form.fromPincode} onChange={handleChange} required className="border p-2" />
-        <input name="toPincode" placeholder="To Pincode" value={form.toPincode} onChange={handleChange} required className="border p-2" />
-        <input name="startTime" type="datetime-local" value={form.startTime} onChange={handleChange} required className="border p-2" />
-        <button type="submit" className="bg-green-500 text-white py-2 px-4">Search Availability</button>
+    <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl mx-auto my-6">
+      <h2 className="text-2xl font-bold text-green-600 mb-4 text-center">
+        Search & Book Vehicles
+      </h2>
+      <form onSubmit={handleSearch} className="grid grid-cols-2 gap-4">
+        <input
+          name="capacityRequired"
+          placeholder="Capacity Required"
+          value={form.capacityRequired}
+          onChange={handleChange}
+          required
+          className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+        />
+        <input
+          name="fromPincode"
+          placeholder="From Pincode"
+          value={form.fromPincode}
+          onChange={handleChange}
+          required
+          className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+        />
+        <input
+          name="toPincode"
+          placeholder="To Pincode"
+          value={form.toPincode}
+          onChange={handleChange}
+          required
+          className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+        />
+        <input
+          name="startTime"
+          type="datetime-local"
+          value={form.startTime}
+          onChange={handleChange}
+          required
+          className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+        />
+        <button
+          type="submit"
+          className="col-span-2 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold"
+        >
+          Search Availability
+        </button>
       </form>
 
-      {message && <p className="mt-2 text-center text-blue-600">{message}</p>}
+      {message && (
+        <p className="mt-4 text-center text-blue-600 font-medium">{message}</p>
+      )}
 
-      <div className="mt-4">
+      <div className="mt-6 space-y-4">
         {vehicles.map((v) => (
-          <div key={v._id} className="border p-3 mb-2">
-            <p><strong>Name:</strong> {v.name}</p>
-            <p><strong>Capacity:</strong> {v.capacityKg} Kg</p>
-            <p><strong>Tyres:</strong> {v.tyres}</p>
-            <button onClick={() => handleBook(v._id)} className="bg-purple-500 text-white px-4 py-1 mt-2">Book Now</button>
+          <div
+            key={v._id}
+            className="border rounded-lg p-4 flex justify-between items-center shadow"
+          >
+            <div>
+              <p className="font-bold text-lg">{v.name}</p>
+              <p>Capacity: {v.capacityKg} Kg</p>
+              <p>Tyres: {v.tyres}</p>
+            </div>
+            <button
+              onClick={() => handleBook(v._id)}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold"
+            >
+              Book Now
+            </button>
           </div>
         ))}
       </div>

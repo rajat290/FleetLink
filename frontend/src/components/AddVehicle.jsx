@@ -1,10 +1,9 @@
-// src/components/AddVehicle.jsx
-import { useState } from 'react';
-import api from '../api/axiosConfig';
+import { useState } from "react";
+import api from "../api/axiosConfig";
 
 export default function AddVehicle() {
-  const [form, setForm] = useState({ name: '', capacityKg: '', tyres: '' });
-  const [message, setMessage] = useState('');
+  const [form, setForm] = useState({ name: "", capacityKg: "", tyres: "" });
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -12,30 +11,62 @@ export default function AddVehicle() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
     try {
-      await api.post('/vehicles', {
+      await api.post("/vehicles", {
         name: form.name,
         capacityKg: Number(form.capacityKg),
         tyres: Number(form.tyres),
       });
-      setMessage('✅ Vehicle added successfully!');
-      setForm({ name: '', capacityKg: '', tyres: '' });
-    } catch (err) {
-      setMessage('❌ Error adding vehicle');
+      setMessage("✅ Vehicle added successfully!");
+      setForm({ name: "", capacityKg: "", tyres: "" });
+    } catch {
+      setMessage("❌ Error adding vehicle");
     }
   };
 
   return (
-    <div className="p-4 border rounded max-w-md mx-auto my-4">
-      <h2 className="text-xl font-semibold mb-2">Add Vehicle</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-        <input name="name" placeholder="Vehicle Name" value={form.name} onChange={handleChange} required className="border p-2" />
-        <input name="capacityKg" placeholder="Capacity (Kg)" value={form.capacityKg} onChange={handleChange} type="number" required className="border p-2" />
-        <input name="tyres" placeholder="Tyres" value={form.tyres} onChange={handleChange} type="number" required className="border p-2" />
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4">Submit</button>
+    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md mx-auto my-6">
+      <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">
+        Add New Vehicle
+      </h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          name="name"
+          placeholder="Vehicle Name"
+          value={form.name}
+          onChange={handleChange}
+          required
+          className="border p-3 rounded focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          name="capacityKg"
+          placeholder="Capacity (Kg)"
+          type="number"
+          value={form.capacityKg}
+          onChange={handleChange}
+          required
+          className="border p-3 rounded focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          name="tyres"
+          placeholder="Tyres"
+          type="number"
+          value={form.tyres}
+          onChange={handleChange}
+          required
+          className="border p-3 rounded focus:ring-2 focus:ring-blue-400"
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold"
+        >
+          Add Vehicle
+        </button>
       </form>
-      {message && <p className="mt-2 text-center">{message}</p>}
+      {message && (
+        <p className="mt-3 text-center font-medium text-green-600">{message}</p>
+      )}
     </div>
   );
 }
