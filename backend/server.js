@@ -1,22 +1,20 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const connectDB = require('./config/db');
+const vehicleRoutes = require('./routes/vehicleRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 
-
-
+dotenv.config();
+connectDB(); // connect to MongoDB
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Basic route
-app.get('/', (req, res) => {
-  res.send('FleetLink Backend Server is running');
-});
+// API Routes
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/bookings', bookingRoutes);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
