@@ -49,3 +49,12 @@ exports.getAvailableVehicles = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+exports.getAllVehicles = async (req, res) => {
+  try {
+    const vehicles = await Vehicle.find();
+    res.status(200).json(vehicles);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};

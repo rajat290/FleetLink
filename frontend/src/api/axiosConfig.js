@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000', // Adjust the base URL asneeded
+  baseURL: 'http://localhost:5000/api', // Updated base URL to include /api prefix
 });
 // api.interceptors.request.use(
 //   (config) => {
@@ -12,4 +12,4 @@ const api = axios.create({
 //     return Promise.reject(error);
 //   }
 // );
-export default api; 
+export default api;
