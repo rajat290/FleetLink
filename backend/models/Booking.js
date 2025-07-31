@@ -25,7 +25,7 @@ startTime: {
     type: Date,
     required: true
 },
-endtime: {
+endTime: {
     type: Date,
     required: true
 },

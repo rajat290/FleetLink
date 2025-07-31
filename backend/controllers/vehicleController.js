@@ -1,5 +1,5 @@
 const Vehicle = require('../models/Vehicle');
-const booking = require('../models/Booking');
+const Booking = require('../models/Booking');
 
 exports.addVehicle = async (req, res) => {
   try {
