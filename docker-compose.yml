@@ -1,20 +1,38 @@
 version: '3.8'
 
 services:
-  backend:
-    build: ./backend
+  mongo:
+    image: mongo:6.0
+    container_name: fleetlink-mongo
+    restart: always
     ports:
-      - "3000:3000"
-    env_file:
-      - .env
+      - "27017:27017"
     volumes:
-      - ./backend:/app
-    command: node server.js
+      - mongo-data:/data/db
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: fleetlink-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/fleetlink
+    depends_on:
+      - mongo
 
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: fleetlink-frontend
+    restart: always
     ports:
-      - "3001:3000"
-    volumes:
-      - ./frontend:/app
-    command: npm start
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:

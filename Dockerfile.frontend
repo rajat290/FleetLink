@@ -1,0 +1,20 @@
+# Use official Node.js LTS image
+FROM node:18
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
+COPY Frontend/package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# Copy frontend source code
+COPY Frontend/ .
+
+# Expose frontend dev server port
+EXPOSE 5173
+
+# Start the frontend dev server
+CMD ["npm", "run", "dev"]
