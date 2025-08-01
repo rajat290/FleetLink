@@ -10,6 +10,8 @@ export default function SearchAndBook() {
   });
   const [vehicles, setVehicles] = useState([]);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,6 +20,7 @@ export default function SearchAndBook() {
   const handleSearch = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
     try {
       const res = await api.get("/vehicles/available", { params: form });
       setVehicles(res.data.availableVehicles || []);
@@ -26,10 +29,13 @@ export default function SearchAndBook() {
       );
     } catch {
       setMessage("❌ Error fetching vehicles");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleBook = async (vehicleId) => {
+    setBookingLoading(true);
     try {
       await api.post("/bookings", {
         vehicleId,
@@ -39,6 +45,8 @@ export default function SearchAndBook() {
       alert("✅ Booking successful!");
     } catch {
       alert("❌ Booking failed: Vehicle may be unavailable.");
+    } finally {
+      setBookingLoading(false);
     }
   };
 
@@ -55,6 +63,7 @@ export default function SearchAndBook() {
           onChange={handleChange}
           required
           className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+          disabled={loading}
         />
         <input
           name="fromPincode"
@@ -63,6 +72,7 @@ export default function SearchAndBook() {
           onChange={handleChange}
           required
           className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+          disabled={loading}
         />
         <input
           name="toPincode"
@@ -71,6 +81,7 @@ export default function SearchAndBook() {
           onChange={handleChange}
           required
           className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+          disabled={loading}
         />
         <input
           name="startTime"
@@ -79,12 +90,14 @@ export default function SearchAndBook() {
           onChange={handleChange}
           required
           className="border p-3 rounded focus:ring-2 focus:ring-green-400 col-span-2 md:col-span-1"
+          disabled={loading}
         />
         <button
           type="submit"
           className="col-span-2 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold"
+          disabled={loading}
         >
-          Search Availability
+          {loading ? "Searching..." : "Search Availability"}
         </button>
       </form>
 
@@ -106,8 +119,9 @@ export default function SearchAndBook() {
             <button
               onClick={() => handleBook(v._id)}
               className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold"
+              disabled={bookingLoading}
             >
-              Book Now
+              {bookingLoading ? "Booking..." : "Book Now"}
             </button>
           </div>
         ))}

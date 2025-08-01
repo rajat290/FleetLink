@@ -4,6 +4,7 @@ import api from "../api/axiosConfig";
 export default function AddVehicle() {
   const [form, setForm] = useState({ name: "", capacityKg: "", tyres: "" });
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -12,6 +13,7 @@ export default function AddVehicle() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
     try {
       await api.post("/vehicles", {
         name: form.name,
@@ -22,6 +24,8 @@ export default function AddVehicle() {
       setForm({ name: "", capacityKg: "", tyres: "" });
     } catch {
       setMessage("❌ Error adding vehicle");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,6 +42,7 @@ export default function AddVehicle() {
           onChange={handleChange}
           required
           className="border p-3 rounded focus:ring-2 focus:ring-blue-400"
+          disabled={loading}
         />
         <input
           name="capacityKg"
@@ -47,6 +52,7 @@ export default function AddVehicle() {
           onChange={handleChange}
           required
           className="border p-3 rounded focus:ring-2 focus:ring-blue-400"
+          disabled={loading}
         />
         <input
           name="tyres"
@@ -56,16 +62,20 @@ export default function AddVehicle() {
           onChange={handleChange}
           required
           className="border p-3 rounded focus:ring-2 focus:ring-blue-400"
+          disabled={loading}
         />
         <button
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold"
+          disabled={loading}
         >
-          Add Vehicle
+          {loading ? "Adding..." : "Add Vehicle"}
         </button>
       </form>
       {message && (
-        <p className="mt-3 text-center font-medium text-green-600">{message}</p>
+        <p className={`mt-3 text-center font-medium ${message.startsWith('✅') ? 'text-green-600' : 'text-red-600'}`}>
+          {message}
+        </p>
       )}
     </div>
   );
