@@ -37,3 +37,30 @@ exports.bookVehicle = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+exports.cancelBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const booking = await Booking.findByIdAndDelete(id);
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+    res.json({ message: "Booking cancelled successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find().populate("vehicleId");
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+exports.getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find().populate('vehicleId');
+    res.status(200).json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};

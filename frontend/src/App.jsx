@@ -2,6 +2,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import AddVehicle from "./components/AddVehicle";
 import SearchAndBook from "./components/SearchAndBook";
 import LandingPage from "./components/LandingPage";
+import Bookings from "./components/Bookings";
 
 export default function App() {
   return (
@@ -16,14 +17,8 @@ export default function App() {
           <Link to="/" className="text-sm sm:text-base hover:underline">
             Home
           </Link>
-          {/* <Link to="/add-vehicle" className="hidden sm:inline hover:underline">
-            Add Vehicle
-          </Link>
-          <Link to="/search" className="hidden sm:inline hover:underline">
-            Search
-          </Link> */}
+          <Link to="/bookings" className="hover:underline">My Bookings</Link>
 
-          {/* Action Buttons */}
           <Link
             to="/search"
             className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm font-semibold shadow"
@@ -44,6 +39,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/add-vehicle" element={<AddVehicle />} />
         <Route path="/search" element={<SearchAndBook />} />
+        <Route path="/bookings" element={<Bookings />} />
       </Routes>
     </div>
   );
