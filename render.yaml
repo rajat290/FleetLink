@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: fleetlink-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install --omit=dev
+    startCommand: node server.js
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: NODE_ENV
+        value: production
+      # Set MONGO_URI in Render dashboard or uncomment and set here
+      # - key: MONGO_URI
+      #   value: your-mongodb-uri
+    autoDeploy: true
+  - type: web
+    name: fleetlink-frontend
+    env: static
+    rootDir: Frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      # Set this after the backend deploys with its URL, e.g. https://<your-backend>.onrender.com/api
+      - key: VITE_API_URL
+        value: 
+      - key: NODE_VERSION
+        value: 20.19.0
+    routes:
+      - type: rewrite
+        source: /.*
+        destination: /index.html

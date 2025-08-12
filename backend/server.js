@@ -12,6 +12,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health + info route for Render checks
+app.get('/', (_req, res) => {
+  res.json({ status: 'ok', service: 'fleetlink-backend' });
+});
+
 // API Routes
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/bookings', bookingRoutes);
