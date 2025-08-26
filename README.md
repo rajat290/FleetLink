@@ -2,6 +2,9 @@
 
 FleetLink is a full-stack MERN (MongoDB, Express.js, React, Node.js) application for managing vehicle bookings in a logistics company. The system allows users to add vehicles to the fleet, search for available vehicles based on date ranges, and book vehicles for specific periods.
 
+
+
+(fleetlink%20image.png)
 ## Features
 
 - Add vehicles to the fleet with details
